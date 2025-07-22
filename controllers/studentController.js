@@ -1,5 +1,21 @@
 const db = require("../db");
 
+
+exports.singleStudents = (req, res) => {
+  const { id } = req.params;
+
+  db.query("SELECT * FROM students WHERE id = ?", [id], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.json(results[0]);
+  });
+};
+
+
 exports.getStudents = (req, res) => {
   db.query("SELECT * FROM students", (err, results) => {
     if (err) return res.status(500).json({ error: err });
